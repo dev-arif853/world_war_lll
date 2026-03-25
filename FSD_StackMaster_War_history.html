@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>স্ট্যাকমাস্টার FSD স্প্রিন্ট যুদ্ধ — মজার গল্প</title>
+  <meta name="description" content="স্ট্যাকমাস্টার FSD টিমের একটি মজার স্প্রিন্ট যুদ্ধের গল্প — UI, Frontend, Backend ও Mobile-এর মহাকাব্যিক লড়াই!">
+</head>
+<body>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Hind+Siliguri:wght@400;600;700&display=swap');
+
+  :root {
+    --ui: #7F77DD;
+    --fe: #1D9E75;
+    --be: #D85A30;
+    --mob: #D4537E;
+    --ui-bg: #EEEDFE;
+    --fe-bg: #E1F5EE;
+    --be-bg: #FAECE7;
+    --mob-bg: #FBEAF0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Hind Siliguri', sans-serif;
+    background: #1a1a2e;
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(127,119,221,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(29,158,117,0.1) 0%, transparent 50%);
+    padding: 20px 0 40px;
+    min-height: 100vh;
+  }
+
+  .book {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 12px;
+  }
+
+  /* === COVER === */
+  .cover {
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    border-radius: 20px;
+    padding: 48px 32px 36px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 20px;
+    border: 2px solid rgba(127,119,221,0.4);
+    box-shadow: 0 0 60px rgba(127,119,221,0.3), 0 20px 40px rgba(0,0,0,0.5);
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 250px; height: 250px;
+    border-radius: 50%;
+    background: rgba(127,119,221,0.08);
+    animation: pulse 3s ease-in-out infinite;
+  }
+  .cover::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: -40px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(29,158,117,0.07);
+    animation: pulse 4s ease-in-out infinite reverse;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.15); opacity: 1; }
+  }
+
+  .cover-vol {
+    font-family: 'Bangers', cursive;
+    font-size: 13px;
+    letter-spacing: 5px;
+    color: #AFA9EC;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    position: relative;
+    z-index: 1;
+  }
+  .cover h1 {
+    font-family: 'Bangers', cursive;
+    font-size: 58px;
+    color: #fff;
+    line-height: 1;
+    text-shadow: 4px 4px 0 #26215C, 0 0 30px rgba(127,119,221,0.8);
+    margin-bottom: 8px;
+    position: relative;
+    z-index: 1;
+    animation: flicker 5s ease-in-out infinite;
+  }
+  @keyframes flicker {
+    0%, 95%, 100% { opacity: 1; }
+    96% { opacity: 0.85; }
+    97% { opacity: 1; }
+    98% { opacity: 0.9; }
+  }
+  .cover-sub {
+    font-size: 15px;
+    color: #CECBF6;
+    margin-bottom: 28px;
+    position: relative;
+    z-index: 1;
+    line-height: 1.6;
+  }
+  .squad-badges {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+  .badge {
+    padding: 7px 16px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 0.2s;
+  }
+  .badge:hover { transform: scale(1.08); }
+  .badge-ui  { background: var(--ui-bg); color: #3C3489; }
+  .badge-fe  { background: var(--fe-bg); color: #0F6E56; }
+  .badge-be  { background: var(--be-bg); color: #712B13; }
+  .badge-mob { background: var(--mob-bg); color: #72243E; }
+
+  /* === CHAPTER === */
+  .chapter {
+    border-radius: 20px;
+    padding: 28px 26px;
+    margin-bottom: 18px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .chapter:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+  .chapter-num {
+    font-family: 'Bangers', cursive;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    opacity: 0.65;
+    margin-bottom: 4px;
+  }
+  .chapter-title {
+    font-family: 'Bangers', cursive;
+    font-size: 28px;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+
+  .ch-ui { background: var(--ui-bg); }
+  .ch-ui .chapter-num { color: var(--ui); }
+  .ch-ui .chapter-title { color: #3C3489; }
+
+  .ch-fe { background: var(--fe-bg); }
+  .ch-fe .chapter-num { color: var(--fe); }
+  .ch-fe .chapter-title { color: #0F6E56; }
+
+  .ch-be { background: var(--be-bg); }
+  .ch-be .chapter-num { color: var(--be); }
+  .ch-be .chapter-title { color: #712B13; }
+
+  .ch-mob { background: var(--mob-bg); }
+  .ch-mob .chapter-num { color: var(--mob); }
+  .ch-mob .chapter-title { color: #72243E; }
+
+  .ch-all { background: #F1EFE8; }
+  .ch-all .chapter-num { color: #5F5E5A; }
+  .ch-all .chapter-title { color: #2C2C2A; }
+
+  .ch-end {
+    background: linear-gradient(135deg, #0d1b2a 0%, #1b3a4b 100%);
+    border: 1px solid rgba(29,158,117,0.3);
+  }
+  .ch-end .chapter-num { color: #4ECBA4; }
+  .ch-end .chapter-title { color: #9FE1CB; }
+
+  /* === STORY BODY === */
+  .story-body {
+    font-size: 14.5px;
+    color: #333;
+    line-height: 1.85;
+  }
+  .ch-end .story-body { color: #cce8e0; }
+  .story-body p { margin-bottom: 12px; }
+  .story-body p:last-child { margin-bottom: 0; }
+
+  /* === CHAT BUBBLES === */
+  .chat { margin: 14px 0; display: flex; flex-direction: column; gap: 10px; }
+  .msg {
+    display: flex;
+    gap: 9px;
+    align-items: flex-start;
+    max-width: 92%;
+  }
+  .msg.right { align-self: flex-end; flex-direction: row-reverse; }
+
+  .avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; flex-shrink: 0;
+    margin-top: 2px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .av-ui  { background: var(--ui); color: #fff; }
+  .av-fe  { background: var(--fe); color: #fff; }
+  .av-be  { background: var(--be); color: #fff; }
+  .av-mob { background: var(--mob); color: #fff; }
+  .av-pm  { background: #888780; color: #fff; }
+
+  .bubble {
+    padding: 9px 14px;
+    border-radius: 16px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    max-width: calc(100% - 44px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  .msg:not(.right) .bubble { border-top-left-radius: 4px; }
+  .msg.right .bubble { border-top-right-radius: 4px; }
+
+  .bub-ui  { background: var(--ui); color: #fff; }
+  .bub-fe  { background: var(--fe); color: #fff; }
+  .bub-be  { background: var(--be); color: #fff; }
+  .bub-mob { background: var(--mob); color: #fff; }
+  .bub-pm  { background: #D3D1C7; color: #2C2C2A; }
+
+  /* === CALLOUT === */
+  .callout {
+    border-left: 4px solid;
+    padding: 12px 16px;
+    border-radius: 0 12px 12px 0;
+    margin: 14px 0;
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+  .call-ui  { border-color: var(--ui); background: rgba(127,119,221,0.12); color: #3C3489; }
+  .call-fe  { border-color: var(--fe); background: rgba(29,158,117,0.12); color: #0F6E56; }
+  .call-be  { border-color: var(--be); background: rgba(216,90,48,0.12); color: #712B13; }
+  .call-mob { border-color: var(--mob); background: rgba(212,83,126,0.12); color: #72243E; }
+  .call-gray { border-color: #888780; background: rgba(136,135,128,0.12); color: #444441; }
+  .call-end { border-color: #4ECBA4; background: rgba(78,203,164,0.1); color: #9FE1CB; }
+
+  /* === SCENE DIVIDER === */
+  .scene {
+    text-align: center;
+    font-family: 'Bangers', cursive;
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: #888;
+    margin: 16px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .scene::before, .scene::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(0,0,0,0.15);
+  }
+
+  /* === SFX === */
+  .sfx {
+    font-family: 'Bangers', cursive;
+    font-size: 26px;
+    text-align: center;
+    margin: 14px 0;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+    animation: sfx-bounce 0.6s ease;
+  }
+  @keyframes sfx-bounce {
+    0% { transform: scale(0.8); opacity: 0; }
+    60% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  /* === FINAL PANEL === */
+  .final {
+    background: linear-gradient(135deg, #085041, #0F6E56, #1D9E75);
+    border-radius: 20px;
+    padding: 32px 28px;
+    text-align: center;
+    margin-bottom: 16px;
+    color: #fff;
+    box-shadow: 0 8px 40px rgba(29,158,117,0.4);
+  }
+  .final-title {
+    font-family: 'Bangers', cursive;
+    font-size: 36px;
+    color: #9FE1CB;
+    margin-bottom: 12px;
+    text-shadow: 2px 2px 0 #064034;
+  }
+  .final p {
+    font-size: 14.5px;
+    line-height: 1.8;
+    color: #E1F5EE;
+    max-width: 500px;
+    margin: 0 auto 14px;
+  }
+
+  /* === STATS === */
+  .stats {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .stat {
+    flex: 1;
+    min-width: 110px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    text-align: center;
+    transition: transform 0.2s;
+  }
+  .stat:hover { transform: scale(1.05); }
+  .stat-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; opacity: 0.75; margin-top: 2px; }
+  .stat-val { font-family: 'Bangers', cursive; font-size: 26px; line-height: 1.2; }
+  .stat-ui { background: var(--ui-bg); color: #3C3489; }
+  .stat-fe { background: var(--fe-bg); color: #0F6E56; }
+  .stat-be { background: var(--be-bg); color: #712B13; }
+  .stat-mob { background: var(--mob-bg); color: #72243E; }
+
+  /* === CHAPTER ICON === */
+  .ch-icon {
+    position: absolute;
+    right: 22px; top: 18px;
+    font-size: 56px;
+    opacity: 0.1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    color: rgba(255,255,255,0.25);
+    font-size: 12px;
+    margin-top: 24px;
+    letter-spacing: 1px;
+  }
+</style>
+
+<div class="book">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-vol">🚀 স্ট্যাকমাস্টার FSD ক্রনিকেলস · খণ্ড ১</div>
+    <h1>মহাকাব্যিক স্প্রিন্ট<br>যুদ্ধের ইতিহাস</h1>
+    <div class="cover-sub">
+      পিক্সেল, API, র‍্যান্ডম বাগ আর<br>
+      প্যাসিভ-অ্যাগ্রেসিভ Slack মেসেজের এক সত্যি(-ইশ) গল্প 😤
+    </div>
+    <div class="squad-badges">
+      <span class="badge badge-ui">🎨 UI দল</span>
+      <span class="badge badge-fe">💻 Frontend</span>
+      <span class="badge badge-be">⚙️ Backend</span>
+      <span class="badge badge-mob">📱 Mobile</span>
+    </div>
+  </div>
+
+  <!-- CH 1 -->
+  <div class="chapter ch-ui">
+    <div class="ch-icon">🎨</div>
+    <div class="chapter-num">অধ্যায় ১</div>
+    <div class="chapter-title">UI দল প্রথম গোলা ছোড়ে</div>
+    <div class="story-body">
+      <p>সোমবার। সকাল ৯টা ২ মিনিট। PM রাহেলা আপু Jira-তে একটা নতুন কার্ড ফেলে দিলেন — যেন একটা নিরীহ মিটিং রুমে হঠাৎ গ্রেনেড ছুঁড়ে দেওয়া হলো: <strong>«ই-কমার্স রিডিজাইন — স্প্রিন্ট এখনই শুরু!»</strong></p>
+      <p>UI দলের Rafi ভাই চোখ বন্ধ করে একটা গভীর নিঃশ্বাস নিলেন। তারপর চোখ খুলেই বললেন, <em>«ভাই, এইটা আমাদের মুহূর্ত।»</em> Figma খোলা হলো। ৩ কাপ কফি বানানো হলো। দুপুর ১২টার মধ্যে Rafi ভাই ৫৩টা আর্টবোর্ড, ১৪টা কম্পোনেন্ট ভেরিয়েন্ট, ৫টা আইকন সেট, এবং একটা লোডিং অ্যানিমেশন তৈরি করলেন — যেটা একদমই দরকার ছিল না, কিন্তু দেখতে এতটাই সুন্দর যে নিজেই মুগ্ধ হয়ে গেলেন।</p>
+    </div>
+
+    <div class="chat">
+      <div class="msg">
+        <div class="avatar av-ui">UI</div>
+        <div class="bubble bub-ui">ডিজাইন শেষ! Figma-তে দিয়ে দিয়েছি। সব পিক্সেল-পারফেক্ট ✨ এতদিন কেউ এত সুন্দর কাজ দেখেনি 😎</div>
+      </div>
+      <div class="msg right">
+        <div class="avatar av-fe">FE</div>
+        <div class="bubble bub-fe">ওহ দারুণ! এখনই দেখছি 👀</div>
+      </div>
+    </div>
+
+    <div class="callout call-ui">
+      ডিজাইনগুলো আসলেই পিক্সেল-পারফেক্ট ছিল। কিন্তু সেগুলো ছিল ১৪৪০px ফ্রেমে, ৭টা কাস্টম ফন্ট ব্যবহার করা হয়েছিল, এবং একটা মাইক্রো-অ্যানিমেশন ছিল যেটার জন্য পার্টিকেল সিস্টেম লাগবে। এই ছোট্ট বিষয়গুলো অন্য দলকে জানানোর প্রয়োজন মনে করেননি Rafi ভাই। সেটা তাদের কাজ।
+    </div>
+
+    <div class="story-body">
+      <p>Rafi ভাই Figma লিংক পাঠালেন — শুক্রবার বিকেল ৫টা ৫৮ মিনিটে।</p>
+    </div>
+
+    <div class="sfx" style="color: #534AB7;">💣 বুম! সাপ্তাহিক ছুটি ধ্বংস হয়ে গেল।</div>
+  </div>
+
+  <!-- CH 2 -->
+  <div class="chapter ch-fe">
+    <div class="ch-icon">💻</div>
+    <div class="chapter-num">অধ্যায় ২</div>
+    <div class="chapter-title">Frontend Figma ফাইল খুলল — এবং অজ্ঞান হওয়ার আগে বাঁচল</div>
+    <div class="story-body">
+      <p>সোমবার সকাল। Samira আপু Figma লিংক খুললেন সেই আশা নিয়ে, যে আশা এখনো জানে না সামনে কী আসছে।</p>
+      <p>তিন সেকেন্ড চলে গেল।</p>
+      <p>তারপর পাঁচটা আরো।</p>
+      <p>তারপর একটা দীর্ঘ, অর্থবহ নীরবতা — যার মধ্যে ছিল বছরের সব কষ্ট।</p>
+    </div>
+
+    <div class="sfx" style="color: #1D9E75;">😶 নীরবতা। বিশুদ্ধ, আতঙ্ক-মাখা নীরবতা।</div>
+
+    <div class="chat">
+      <div class="msg">
+        <div class="avatar av-fe">FE</div>
+        <div class="bubble bub-fe">Rafi ভাই... এই ফন্ট «Castellanova Hand-Drawn Ultra Pro» — এটা কি Google Fonts-এ আছে?</div>
+      </div>
+      <div class="msg right">
+        <div class="avatar av-ui">UI</div>
+        <div class="bubble bub-ui">এটা প্রিমিয়াম ফন্ট! অনেক aesthetic 🌸</div>
+      </div>
+      <div class="msg">
+        <div class="avatar av-fe">FE</div>
+        <div class="bubble bub-fe">এর দাম $৪০০। আর আমাদের বাজেট?</div>
+      </div>
+      <div class="msg right">
+        <div class="avatar av-ui">UI</div>
+        <div class="bubble bub-ui">শিল্পের একটা মূল্য থাকে 🙂</div>
+      </div>
+      <div class="msg">
+        <div class="avatar av-fe">FE</div>
+        <div class="bubble bub-fe">এই dropdown-এর shadow... এটা কি ৬ লেয়ারের box-shadow???</div>
+      </div>
+      <div class="msg right">
+        <div class="avatar av-ui">UI</div>
+        <div class="bubble bub-ui">এটা depth দেয়! Depth ছাড়া জীবন মিথ্যা 🎭</div>
+      </div>
+      <div class="msg">
+        <div class="avatar av-fe">FE</div>
+        <div class="bubble bub-fe">আর এই বাটনের hover animation-এ... gradient আছে, glow আছে, border animation আছে, scale আছে, আর একটা জিনিস আছে যেটার নাম আমি জানি না কিন্তু ভয় পাচ্ছি।</div>
+      </div>
+      <div class="msg right">
+        <div class="avatar av-ui">UI</div>
+        <div class="bubble bub-ui">ওটা হলো «ম্যাজিক স্পার্কল ইফেক্ট» ✨ আমি নিজেই ইনভেন্ট করেছি!</div>
+      </div>
+    </div>
+
+    <div class="callout call-fe">
+      Samira আপু একটা বাটনের হোভার স্টেট রিপ্লিকেট করতে ৩ ঘণ্টা লাগালেন। সেই বাটনে ছিল গ্রেডিয়েন্ট, গ্লো, শ্যাডো, বর্ডার অ্যানিমেশন, স্কেল ট্রান্সফর্ম, এবং একটা রহস্যময় পার্টিকেল যেটা mouse hover-এ বের হয়। Samira আপু এটাকে বললেন «ক্রিমিনালি সুন্দর।» এবং তারপরই বললেন «এটা আসলে একটা অপরাধ।»
+    </div>
+
+    <div class="story-body">
+      <p>কিন্তু Frontend করলই। কারণ এটাই Frontend-এর স্বভাব। তারা নীরবে কষ্ট পায়, পিক্সেলে পিক্সেলে, যতক্ষণ না সেটা পারফেক্ট হয় — অথবা কফি শেষ হয়। যেটা আগে হয়।</p>
+    </div>
+  </div>
+
+  <!-- CH 3 -->
+  <div class="chapter ch-be">
+    <div class="ch-icon">⚙️</div>
+    <div class="chapter-num">অধ্যায় ৩</div>
+    <div class="chapter-title">Backend «প্রায় শেষ» — (২য় সপ্তাহ, ৪ সপ্তাহের মধ্যে)</div>
+    <div class="story-body">
+      <p>ডিজাইন ও Frontend-এর যুদ্ধ যখন চলছিল, Backend দল তখন সম্পূর্ণ অদৃশ্য হয়ে গিয়েছিল। Alex ভাই তিন দিন ধরে একটাও মেসেজ পাঠাননি। এটা স্বাভাবিক ছিল। সব ঠিকঠাক ছিল।</p>
+    </div>
+
+    <div class="chat">
+      <div class="msg">
+        <div class="avatar av-fe">FE</div>
+        <div class="bubble bub-fe">Alex ভাই, API কবে রেডি হবে? Product listing wire up করতে হবে আমাদের।</div>
+      </div>
+      <div class="msg right">
+        <div class="avatar av-be">BE</div>
+        <div class="bubble bub-be">প্রায় শেষ 👍</div>
+      </div>
+    </div>
+
+    <div class="scene">— ৩ দিন পরে —</div>
+
+    <div class="chat">
+      <div class="msg">
+        <div class="avatar av-fe">FE</div>
+        <div class="bubble bub-fe">API-র কোনো আপডেট? স্প্রিন্ট শুক্রবার শেষ।</div>
+      </div>
+      <div class="msg right">
+        <div class="avatar av-be">BE</div>
+        <div class="bubble bub-be">প্রায় শেষ 👍</div>
+      </div>
+    </div>
+
+    <div class="scene">— আরো ২ দিন পরে —</div>
+
+    <div class="chat">
+      <div class="msg">
+        <div class="avatar av-mob">MOB</div>
+        <div class="bubble bub-mob">হ্যালো! Mobile এখানে। আমাদেরও API দরকার। এটা কি—</div>
+      </div>
+      <div class="msg right">
+        <div class="avatar av-be">BE</div>
+        <div class="bubble bub-be">প্রায় শেষ 👍</div>
+      </div>
+      <div class="msg">
+        <div class="avatar av-mob">MOB</div>
+        <div class="bubble bub-mob">Alex ভাই আপনি কি আদৌ কীবোর্ড থেকে «প্রায় শেষ 👍» ছাড়া অন্য কিছু টাইপ করতে পারেন?</div>
+      </div>
+      <div class="msg right">
+        <div class="avatar av-be">BE</div>
+        <div class="bubble bub-be">প্রায় শেষ 👍</div>
+      </div>
+    </div>
+
+    <div class="callout call-be">
+      API প্রায় শেষ ছিল না। Alex ভাই আবিষ্কার করেছিলেন যে database schema-তে রিফ্যাক্টরিং দরকার, যার জন্য তিনটা সার্ভিস রিরাইট করতে হবে, যেগুলো রিরাইট করতে গিয়ে একটা race condition বের হলো, যেটা নিয়ে রাত ২টায় তিনি নিজের সাথে eventual consistency নিয়ে দার্শনিক তর্কে মেতে উঠলেন। এর মাঝে তিনি পুরো Admin Portal-ও বানিয়ে ফেললেন — যেটা কেউ চায়নি কিন্তু দেখতে অসাধারণ লাগছিল।
+    </div>
+
+    <div class="sfx" style="color: #993C1D;">🔧 API রেডি হবে «খুব শীঘ্রই»। সংজ্ঞাটা নির্ভর করে কার দৃষ্টিভঙ্গি থেকে দেখছেন তার উপর।</div>
+  </div>
+
+  <!-- CH 4 -->
+  <div class="chapter ch-mob">
+    <div class="ch-icon">📱</div>
+    <div class="chapter-num">অধ্যায় ৪</div>
+    <div class="chapter-title">Mobile ধৈর্য ধরার চেষ্টা করল। Mobile ব্যর্থ হলো।</div>
+    <div class="story-body">
+      <p>Priya আপু দুটো জিনিস অপেক্ষা করছিলেন: UI-র ফাইনালাইজড ডিজাইন এবং Backend-এর API। তিনি পেয়েছিলেন: একটা Figma ফাইল যেটা তাঁর ট্যাবলেটে খোলাই যাচ্ছিল না, আর «প্রায় শেষ 👍» — মোট ৯ বার।</p>
+      <p>তাই তিনি যা করলেন যেকোনো যুক্তিসম্পন্ন মোবাইল ডেভেলপার করতেন — নিজেই সব mock বানালেন, নিজেই fake endpoint বানালেন, এবং রাত ১২টায় নিজের মনমতো JSON লিখে পুরো অ্যাপটা বানিয়ে ফেললেন।</p>
+    </div>
+
+    <div class="chat">
+      <div class="msg">
+        <div class="avatar av-mob">MOB</div>
+        <div class="bubble bub-mob">Alex ভাই, API docs-এ লেখা আছে product object-এ «name» field আছে। কিন্তু actual response-এ আসছে «product_name»। এটা কী হলো?</div>
+      </div>
+      <div class="msg right">
+        <div class="avatar av-be">BE</div>
+        <div class="bubble bub-be">ওহ হ্যাঁ আমরা consistency-র জন্য নাম বদলেছি। Frontend-কে গত সপ্তাহে বলা হয়েছে।</div>
+      </div>
+      <div class="msg">
+        <div class="avatar av-mob">MOB</div>
+        <div class="bubble bub-mob">Frontend-কে বলেছেন আর Mobile-কে বলেননি?? আমরাও একই API use করছি নাকি করছি না???</div>
+      </div>
+      <div class="msg right">
+        <div class="avatar av-be">BE</div>
+        <div class="bubble bub-be">ভেবেছিলাম Frontend তোমাদের বলবে 🙂</div>
+      </div>
+      <div class="msg">
+        <div class="avatar av-fe">FE</div>
+        <div class="bubble bub-fe">আমি ভেবেছিলাম Backend বলবে 🙂</div>
+      </div>
+      <div class="msg">
+        <div class="avatar av-mob">MOB</div>
+        <div class="bubble bub-mob">তোমরা দুজনেই ভাবছিলে একে অপরে বলবে, আর আমি এখানে নিজে নিজে পুরো API আবিষ্কার করছি। চমৎকার। অসাধারণ টিমওয়ার্ক।</div>
+      </div>
+    </div>
+
+    <div class="sfx" style="color: #993356;">😤 Priya আপু চ্যানেল ছেড়েছেন।</div>
+
+    <div class="callout call-mob">
+      Priya আপু ২০ মিনিট পরে ফিরে এলেন — একটা কাজ করা prototype, আপডেটেড field names, এবং একটা Postman collection সহ যেখানে প্রতিটা inconsistency documented ছিল। এত কষ্টের পর পাঠালেন মাত্র একটা emoji: 🙃
+    </div>
+  </div>
+
+  <!-- CH 5 -->
+  <div class="chapter ch-all">
+    <div class="ch-icon">⚔️</div>
+    <div class="chapter-num">অধ্যায় ৫</div>
+    <div class="chapter-title">মহাকাব্যিক স্ট্যান্ডআপ সংঘর্ষ</div>
+    <div class="story-body">
+      <p>বৃহস্পতিবারের standup। সবাই ক্লান্ত। চোখের নিচে গভীর কালো দাগ। Demo কাল। PM রাহেলা আপু হাসছিলেন সেই শক্তিতে — যে শক্তি শুধু তাদের থাকে যারা কোড লেখেন না।</p>
+    </div>
+
+    <div class="chat">
+      <div class="msg">
+        <div class="avatar av-pm">PM</div>
+        <div class="bubble bub-pm">তো টিম, কাল demo-র জন্য কি আমরা রেডি? 😊</div>
+      </div>
+      <div class="msg right">
+        <div class="avatar av-ui">UI</div>
+        <div class="bubble bub-ui">ডিজাইন শেষ! কিন্তু Frontend আমার বাটনের রং বদলে দিয়েছে…</div>
+      </div>
+      <div class="msg">
+        <div class="avatar av-fe">FE</div>
+        <div class="bubble bub-fe">#7F77DD রং সাদা ব্যাকগ্রাউন্ডে WCAG contrast meet করে না! এটা accessibility issue!</div>
+      </div>
+      <div class="msg right">
+        <div class="avatar av-ui">UI</div>
+        <div class="bubble bub-ui">এটা INTENTIONALLY SOFT ছিল! এটাই ছিল vibes!</div>
+      </div>
+      <div class="msg">
+        <div class="avatar av-fe">FE</div>
+        <div class="bubble bub-fe">«Vibes» WCAG pass করে না, Rafi ভাই।</div>
+      </div>
+      <div class="msg right">
+        <div class="avatar av-ui">UI</div>
+        <div class="bubble bub-ui">তাহলে বলো WCAG-এর কোনো aesthetic sense নেই 😤</div>
+      </div>
+      <div class="msg">
+        <div class="avatar av-be">BE</div>
+        <div class="bubble bub-be">যাই হোক, API live। কিন্তু security-র জন্য auth token ১৫ মিনিটে expire হয়।</div>
+      </div>
+      <div class="msg right">
+        <div class="avatar av-fe">FE</div>
+        <div class="bubble bub-fe">১৫ মিনিট???? ব্যবহারকারীরা কি প্রতি ১৫ মিনিটে logout করে login করবে???</div>
+      </div>
+      <div class="msg">
+        <div class="avatar av-be">BE</div>
+        <div class="bubble bub-be">Best security practices অনুযায়ী ইউজারদের নিয়মিত relogin করা উচিত 👍</div>
+      </div>
+      <div class="msg right">
+        <div class="avatar av-mob">MOB</div>
+        <div class="bubble bub-mob">Token expire হলে mobile app crash হয় Alex ভাই…</div>
+      </div>
+      <div class="msg">
+        <div class="avatar av-be">BE</div>
+        <div class="bubble bub-be">সেটা Mobile-এর সমস্যা।</div>
+      </div>
+      <div class="msg right">
+        <div class="avatar av-mob">MOB</div>
+        <div class="bubble bub-mob">এটা সম্পূর্ণ Backend-এর সমস্যা।</div>
+      </div>
+      <div class="msg">
+        <div class="avatar av-be">BE</div>
+        <div class="bubble bub-be">টেকনিক্যালি—</div>
+      </div>
+      <div class="msg right">
+        <div class="avatar av-mob">MOB</div>
+        <div class="bubble bub-mob">টেকনিক্যালি কিছু না। আমার অ্যাপ crash হচ্ছে।</div>
+      </div>
+      <div class="msg">
+        <div class="avatar av-pm">PM</div>
+        <div class="bubble bub-pm">হাহাহা দারুণ! কাল demo-তে সবাইকে দেখবো 😊👍</div>
+      </div>
+    </div>
+
+    <div class="callout call-gray">
+      PM রাহেলা আপু thread পড়া বন্ধ করেছিলেন «ডিজাইন শেষ!» মেসেজের পরেই। তিনি ততক্ষণে ক্লায়েন্টকে email পাঠিয়ে দিয়েছেন যে সব কিছু schedule-অনুযায়ী চলছে।
+    </div>
+  </div>
+
+  <!-- CH 6 — THE DARK NIGHT -->
+  <div class="chapter ch-be">
+    <div class="ch-icon">🌙</div>
+    <div class="chapter-num">অধ্যায় ৬</div>
+    <div class="chapter-title">Demo-র আগের রাত — অন্ধকারে যুদ্ধ</div>
+    <div class="story-body">
+      <p>বৃহস্পতিবার রাত ১১টা। প্রত্যেকে নিজের ডেস্কে বসে আছেন। চোখে ঘুম নেই। মোনিটরের আলো মুখে পড়েছে।</p>
+      <p>Samira আপু তখনো সেই পার্টিকেল অ্যানিমেশন ঠিক করার চেষ্টা করছেন। Priya আপু token expiry-র workaround কোড করছেন। Alex ভাই চুপচাপ token-এর সময়সীমা বদলে দিচ্ছেন। এবং Rafi ভাই… Rafi ভাই রাত ২টায় একটা নতুন color scheme নিয়ে চিন্তা করছেন।</p>
+    </div>
+
+    <div class="chat">
+      <div class="msg">
+        <div class="avatar av-fe">FE</div>
+        <div class="bubble bub-fe">রাত ১২টা। সব ঠিক আছে?</div>
+      </div>
+      <div class="msg right">
+        <div class="avatar av-be">BE</div>
+        <div class="bubble bub-be">প্রায় শেষ 👍</div>
+      </div>
+      <div class="msg">
+        <div class="avatar av-mob">MOB</div>
+        <div class="bubble bub-mob">আমি token refresh logic add করলাম নিজে নিজেই। সমস্যা নেই আর।</div>
+      </div>
+      <div class="msg right">
+        <div class="avatar av-be">BE</div>
+        <div class="bubble bub-be">আমিও token ২৪ ঘণ্টা করে দিচ্ছি। তোমার কাজ লাগবে না হয়তো 😬</div>
+      </div>
+      <div class="msg">
+        <div class="avatar av-mob">MOB</div>
+        <div class="bubble bub-mob">...আমি রাত ৩ ঘণ্টা খেটে এই কোড লিখলাম।</div>
+      </div>
+      <div class="msg right">
+        <div class="avatar av-be">BE</div>
+        <div class="bubble bub-be">তুমি চাইলে রাখতে পারো। দুটো solution থাকা ভালো 😅</div>
+      </div>
+      <div class="msg">
+        <div class="avatar av-ui">UI</div>
+        <div class="bubble bub-ui">ভাইয়েরা, রাত ২টায় আমার মনে হচ্ছে সব বাটন একটু বড় হলে ভালো হতো…</div>
+      </div>
+      <div class="msg right">
+        <div class="avatar av-fe">FE</div>
+        <div class="bubble bub-fe">Rafi ভাই আপনি ঘুমাতে যান প্লিজ।</div>
+      </div>
+    </div>
+
+    <div class="sfx" style="color: #D85A30;">🌙 Demo-র ৮ ঘণ্টা আগে। সবাই জীবিত। কোনোমতে।</div>
+  </div>
+
+  <!-- CH 7 — DEMO DAY -->
+  <div class="chapter ch-fe">
+    <div class="ch-icon">🔥</div>
+    <div class="chapter-num">অধ্যায় ৭</div>
+    <div class="chapter-title">Demo Day — অলৌকিকতার দিন</div>
+    <div class="story-body">
+      <p>শুক্রবার। দুপুর ২টা। Demo শুরু হলো।</p>
+      <p>Samira আপুর web app সুন্দরভাবে লোড হলো। সেই ভয়ঙ্কর দামি ফন্টের জায়গায় একটা বিনামূল্যের ফন্ট দেওয়া হয়েছে — যেটা ৯৪% একই দেখতে। Rafi ভাই চোখ সরু করে তাকালেন কিন্তু কিছু বললেন না। Shadow পারফেক্ট। Animation smooth। পার্টিকেল-ও চলছে।</p>
+      <p>Alex ভাইয়ের Admin Portal দেখে সবাই থ। Product management, user roles, analytics dashboard — সবই আছে। তিনি অন্ধকারে বসে, বাকি সবাই ঝগড়া করার সময়, একটা সত্যিকারের অসাধারণ কিছু বানিয়ে ফেলেছিলেন।</p>
+    </div>
+
+    <div class="chat">
+      <div class="msg">
+        <div class="avatar av-be">BE</div>
+        <div class="bubble bub-be">আচ্ছা, একটা কথা। আজ সকালে token ২৪ ঘণ্টা করে দিয়েছি। মনে হলো বেশি reasonable।</div>
+      </div>
+      <div class="msg right">
+        <div class="avatar av-mob">MOB</div>
+        <div class="bubble bub-mob">...Alex ভাই আপনাকে ধন্যবাদ। সত্যিই।</div>
+      </div>
+      <div class="msg">
+        <div class="avatar av-be">BE</div>
+        <div class="bubble bub-be">👍</div>
+      </div>
+      <div class="msg right">
+        <div class="avatar av-ui">UI</div>
+        <div class="bubble bub-ui">Samira আপু... ফন্টটা বদলে দিয়েছ?</div>
+      </div>
+      <div class="msg">
+        <div class="avatar av-fe">FE</div>
+        <div class="bubble bub-fe">৯৪% identical। ক্লায়েন্ট বুঝবে না।</div>
+      </div>
+      <div class="msg right">
+        <div class="avatar av-ui">UI</div>
+        <div class="bubble bub-ui">...ঠিক আছে 😑</div>
+      </div>
+    </div>
+
+    <div class="story-body">
+      <p>Priya আপু mobile app demo করলেন। দেখতে অসাধারণ। দ্রুত। Checkout flow-এ একটা ছোট্ট haptic vibration ছিল — কেউ চায়নি, কিন্তু সবাই ভালোবেসে ফেলল। ক্লায়েন্ট হাততালি দিলেন।</p>
+    </div>
+
+    <div class="sfx" style="color: #1D9E75;">🎉 সব কিছু কোনোভাবে কাজ করলো! কীভাবে? জানি না।</div>
+
+    <div class="stats">
+      <div class="stat stat-ui"><div class="stat-label">UI রিভিশন</div><div class="stat-val">৫৩</div></div>
+      <div class="stat stat-fe"><div class="stat-val">৯,২০০</div><div class="stat-label">লাইন CSS</div></div>
+      <div class="stat stat-be"><div class="stat-val">৩×</div><div class="stat-label">«প্রায় শেষ» প্রতিদিন</div></div>
+      <div class="stat stat-mob"><div class="stat-val">০</div><div class="stat-label">Mock এখনো Production-এ</div></div>
+    </div>
+  </div>
+
+  <!-- EPILOGUE -->
+  <div class="final">
+    <div class="final-title">🕊️ উপসংহার: যুদ্ধবিরতির পর</div>
+    <p>সন্ধ্যা ৬টায় চারটা দলই group chat-এ জড়ো হলো — লড়াই করতে নয়, একসাথে উৎসব করতে। Rafi ভাই একটা পিক্সেল-পারফেক্ট উদযাপনের GIF পাঠালেন। Samira আপু সেই কুখ্যাত বাটন অ্যানিমেশনের CodePen লিংক শেয়ার করলেন «ইতিহাসের জন্য।» Alex ভাই নীরবে API docs-এর লিংক দিলেন — যেটা তিনি চুপচাপ রাতভর লিখে শেষ করেছিলেন। আর Priya আপু তাঁর Postman collection পাঠালেন একটা নোটসহ: «পরের স্প্রিন্টের জন্য। স্বাগতম।»</p>
+    <p>তারা ship করেছে। লড়েছে। একে অপরের জীবন সিদ্ধান্ত নিয়ে হাসি-ঠাট্টা করেছে। আর সেই বিশৃঙ্খলার মাঝে — missing font, «প্রায় শেষ», হঠাৎ field rename, ১৫ মিনিটের token — তারা কিছু একটা সত্যিকারের তৈরি করেছে।</p>
+    <p style="font-family: 'Bangers', cursive; font-size: 22px; color: #9FE1CB; letter-spacing: 2px;">পরের স্প্রিন্ট পর্যন্ত। 🚀</p>
+  </div>
+
+  <div class="footer">স্ট্যাকমাস্টার FSD ক্রনিকেলস · এই গল্পের যেকোনো মিল বাস্তব জীবনের সাথে সম্পূর্ণ ইচ্ছাকৃত 😄</div>
+
+</div>
+
+</body>
+</html>
