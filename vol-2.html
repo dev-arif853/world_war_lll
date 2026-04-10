@@ -513,12 +513,31 @@
     .spec-row { flex-direction: column; gap: 2px; }
     .spec-val { text-align: left; }
   }
+  .nav-button {
+      background-color: #007BFF;
+      color: white;
+      padding: 10px 15px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      margin: 4px 2px;
+      border-radius: 5px;
+      border: none;
+      font-size: 16px;
+  }
+  .nav-button:hover {
+      background-color: #0056b3;
+  }
 </style>
 </head>
 <body>
 
 <div class="book">
-
+ <nav>
+        <a href="index.html" class="nav-button" >Vol 1</a>
+          <a href="vol-2.html" class="nav-button">Vol 2</a>
+          <a href="vol-2.html" class="nav-button" disable="">Vol 3</a>
+      </nav>
   <!-- ══ COVER ══ -->
   <div class="cover">
     <div class="cover-ribbon">
