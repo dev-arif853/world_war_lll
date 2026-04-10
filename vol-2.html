@@ -1,1 +1,1009 @@
 
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>পিক্সেল এবং আভিজাত্য — দ্য এফএসডি ক্রনিকলস ভলিউম ২</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;700;900&family=JetBrains+Mono:wght@400;600&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sifat: #185FA5;
+    --sifat-light: #E6F1FB;
+    --sifat-mid: #378ADD;
+    --sifat-dark: #042C53;
+    --sizan: #993556;
+    --sizan-light: #FBEAF0;
+    --sizan-mid: #D4537E;
+    --sizan-dark: #4B1528;
+    --gold: #BA7517;
+    --gold-light: #FAEEDA;
+    --gold-dark: #412402;
+    --green: #3B6D11;
+    --green-light: #EAF3DE;
+    --bg: #f5f3ef;
+    --surface: #ffffff;
+    --text: #1a1a1a;
+    --text-muted: #6b6b6b;
+    --border: rgba(0,0,0,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Hind Siliguri', 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── GRAIN OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 128px;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--sifat); border-radius: 99px; }
+
+  .book {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 24px 20px 80px;
+  }
+
+  /* ══ COVER ══ */
+  .cover {
+    border-radius: 24px;
+    overflow: hidden;
+    margin-bottom: 28px;
+    box-shadow: 0 20px 60px rgba(4,44,83,0.25);
+    animation: fadeUp 0.7s ease both;
+  }
+  .cover-ribbon {
+    background: #042C53;
+    padding: 10px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .cover-ribbon span {
+    font-family: 'Bangers', cursive;
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: #85B7EB;
+    text-transform: uppercase;
+  }
+  .cover-body {
+    background: linear-gradient(160deg, #0C447C 0%, #185FA5 60%, #1D6FB8 100%);
+    padding: 48px 36px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover-body::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    pointer-events: none;
+  }
+  .cover-body::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -60px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.03);
+    pointer-events: none;
+  }
+  .cover-eyebrow {
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 4px;
+    color: #85B7EB;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .cover-h1 {
+    font-family: 'Bangers', cursive;
+    font-size: 72px;
+    line-height: 0.95;
+    color: #fff;
+    text-shadow: 4px 4px 0 #042C53;
+    margin-bottom: 8px;
+  }
+  .cover-sub {
+    font-family: 'Bangers', cursive;
+    font-size: 22px;
+    color: #B5D4F4;
+    letter-spacing: 1px;
+    margin-bottom: 32px;
+  }
+  .vs-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+  .hero-card {
+    border-radius: 16px;
+    padding: 18px 28px;
+    min-width: 160px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: rgba(255,255,255,0.3);
+  }
+  .hero-sf { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.15); }
+  .hero-sz { background: rgba(153,53,86,0.4); border: 1px solid rgba(212,83,126,0.3); }
+  .hero-name {
+    font-family: 'Bangers', cursive;
+    font-size: 28px;
+    color: #fff;
+    letter-spacing: 1px;
+    line-height: 1;
+  }
+  .hero-title {
+    font-size: 11px;
+    color: rgba(255,255,255,0.65);
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .vs-badge {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: #FAC775;
+    color: #633806;
+    font-family: 'Bangers', cursive;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(250,199,117,0.4);
+  }
+  .cover-tagline {
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    font-style: italic;
+  }
+  .cover-footer {
+    background: #185FA5;
+    padding: 12px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .tool-pill {
+    background: rgba(255,255,255,0.12);
+    border-radius: 99px;
+    padding: 5px 14px;
+    font-size: 11px;
+    color: #B5D4F4;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  /* ══ CHAPTER ══ */
+  .chapter {
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    animation: fadeUp 0.6s ease both;
+  }
+  .chapter:nth-child(2) { animation-delay: 0.1s; }
+  .chapter:nth-child(3) { animation-delay: 0.2s; }
+  .chapter:nth-child(4) { animation-delay: 0.3s; }
+  .chapter:nth-child(5) { animation-delay: 0.4s; }
+  .chapter:nth-child(6) { animation-delay: 0.5s; }
+
+  .ch-icon {
+    position: absolute;
+    right: 28px; top: 24px;
+    font-size: 64px;
+    opacity: 0.08;
+    pointer-events: none;
+    user-select: none;
+    line-height: 1;
+  }
+
+  .ch-sf { background: var(--sifat-light); }
+  .ch-sz { background: var(--sizan-light); }
+  .ch-war { background: #F1EFE8; }
+  .ch-end { background: var(--green-light); }
+
+  .chapter-num {
+    font-family: 'Bangers', cursive;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    opacity: 0.65;
+  }
+  .ch-sf .chapter-num { color: var(--sifat); }
+  .ch-sz .chapter-num { color: var(--sizan); }
+  .ch-war .chapter-num { color: #5F5E5A; }
+  .ch-end .chapter-num { color: var(--green); }
+
+  .chapter-title {
+    font-family: 'Bangers', cursive;
+    font-size: 32px;
+    line-height: 1.1;
+    margin-bottom: 18px;
+  }
+  .ch-sf .chapter-title { color: var(--sifat-dark); }
+  .ch-sz .chapter-title { color: var(--sizan-dark); }
+  .ch-war .chapter-title { color: #1a1a1a; }
+  .ch-end .chapter-title { color: #173404; }
+
+  /* ── STORY TEXT ── */
+  .story {
+    font-size: 16px;
+    color: var(--text);
+    line-height: 1.8;
+  }
+  .story p { margin-bottom: 12px; }
+  .story p:last-child { margin-bottom: 0; }
+
+  /* ── SCENE DIVIDER ── */
+  .scene {
+    text-align: center;
+    font-family: 'Bangers', cursive;
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: var(--text-muted);
+    margin: 20px 0 14px;
+    position: relative;
+  }
+  .scene::before, .scene::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 28%;
+    height: 1px;
+    background: rgba(0,0,0,0.1);
+  }
+  .scene::before { left: 0; }
+  .scene::after { right: 0; }
+
+  /* ── CHAT ── */
+  .chat {
+    margin: 18px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .msg {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    max-width: 82%;
+  }
+  .msg.right {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+  }
+  .av {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 900;
+    color: #fff;
+    flex-shrink: 0;
+    margin-top: 2px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .av-sf { background: var(--sifat); }
+  .av-sz { background: var(--sizan); }
+  .av-cl { background: #888780; }
+
+  .bub {
+    padding: 10px 16px;
+    border-radius: 18px;
+    font-size: 14px;
+    line-height: 1.55;
+    max-width: calc(100% - 46px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .msg:not(.right) .bub { border-top-left-radius: 4px; }
+  .msg.right .bub { border-top-right-radius: 4px; }
+
+  .bub-sf { background: var(--sifat); color: #fff; }
+  .bub-sz { background: var(--sizan); color: #fff; }
+  .bub-cl { background: #E8E5DF; color: #2C2C2A; }
+
+  /* ── SFX ── */
+  .sfx {
+    font-family: 'Bangers', cursive;
+    font-size: 28px;
+    text-align: center;
+    margin: 16px 0;
+    letter-spacing: 2px;
+  }
+
+  /* ── CALLOUT ── */
+  .callout {
+    border-left: 4px solid;
+    padding: 12px 16px;
+    border-radius: 0 12px 12px 0;
+    margin: 16px 0;
+    font-size: 15px;
+    font-style: italic;
+    line-height: 1.7;
+  }
+  .call-sf { border-color: var(--sifat); background: rgba(24,95,165,0.08); color: var(--sifat-dark); }
+  .call-sz { border-color: var(--sizan); background: rgba(153,53,86,0.08); color: var(--sizan-dark); }
+  .call-war { border-color: #888780; background: rgba(136,135,128,0.1); color: #3d3d3d; }
+  .call-gold { border-color: var(--gold); background: rgba(186,117,23,0.08); color: var(--gold-dark); }
+
+  /* ── FIGMA SPEC CARD ── */
+  .spec-card {
+    border-radius: 14px;
+    border: 1.5px solid rgba(153,53,86,0.2);
+    background: rgba(153,53,86,0.05);
+    padding: 18px;
+    margin: 16px 0;
+  }
+  .spec-title {
+    font-family: 'Bangers', cursive;
+    font-size: 16px;
+    letter-spacing: 1.5px;
+    color: var(--sizan);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .spec-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(153,53,86,0.1);
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .spec-row:last-child { border-bottom: none; }
+  .spec-key { font-size: 13px; font-weight: 900; color: #72243E; white-space: nowrap; }
+  .spec-val { font-size: 13px; color: var(--sizan-dark); font-style: italic; text-align: right; }
+
+  /* ── CODE BLOCK ── */
+  .code {
+    background: #0d1117;
+    border-radius: 12px;
+    padding: 18px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.8;
+    margin: 16px 0;
+    overflow-x: auto;
+    color: #B5D4F4;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .code .c-comment { color: #444c56; }
+  .code .c-prop { color: #79c0ff; }
+  .code .c-val { color: #56d364; }
+  .code .c-str { color: #e3b341; }
+  .code .c-err { color: #f85149; }
+  .code .c-ok { color: #5DCAA5; }
+  .code .c-indent { margin-left: 18px; display: inline-block; }
+
+  /* ── PROGRESS BARS ── */
+  .progress-section { margin: 18px 0; }
+  .progress-label-main { font-size: 11px; font-weight: 900; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+  .prog-item { margin-bottom: 10px; }
+  .prog-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+  .prog-track { background: rgba(0,0,0,0.08); border-radius: 99px; height: 10px; overflow: hidden; }
+  .prog-fill { height: 100%; border-radius: 99px; transition: width 1.2s ease; }
+
+  /* ── STAT PILLS ── */
+  .stat-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .stat-pill {
+    flex: 1;
+    min-width: 120px;
+    border-radius: 14px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+  .stat-num { font-family: 'Bangers', cursive; font-size: 32px; line-height: 1; }
+  .stat-lbl { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-top: 3px; opacity: 0.7; }
+  .sp-sf { background: var(--sifat-light); color: var(--sifat-dark); }
+  .sp-sz { background: var(--sizan-light); color: var(--sizan-dark); }
+  .sp-gold { background: var(--gold-light); color: var(--gold-dark); }
+  .sp-green { background: var(--green-light); color: #173404; }
+
+  /* ══ EPILOGUE ══ */
+  .epilogue {
+    background: #042C53;
+    border-radius: 20px;
+    padding: 36px 32px;
+    text-align: center;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 40px rgba(4,44,83,0.2);
+    animation: fadeUp 0.6s 0.6s ease both;
+  }
+  .epi-title {
+    font-family: 'Bangers', cursive;
+    font-size: 36px;
+    color: #85B7EB;
+    margin-bottom: 14px;
+    letter-spacing: 1px;
+  }
+  .epi-body {
+    font-size: 16px;
+    color: #B5D4F4;
+    line-height: 1.85;
+    max-width: 540px;
+    margin: 0 auto 14px;
+  }
+  .epi-quote {
+    font-family: 'Bangers', cursive;
+    font-size: 20px;
+    color: #FAC775;
+    letter-spacing: 1px;
+    margin-top: 6px;
+  }
+  .epi-divider {
+    width: 60px; height: 2px;
+    background: rgba(133,183,235,0.3);
+    margin: 18px auto;
+    border-radius: 99px;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 20px 0 0;
+    font-family: 'Bangers', cursive;
+    letter-spacing: 2px;
+    opacity: 0.5;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 520px) {
+    .cover-h1 { font-size: 52px; }
+    .chapter { padding: 22px; }
+    .vs-row { gap: 12px; }
+    .hero-card { min-width: 130px; padding: 14px 18px; }
+    .msg { max-width: 92%; }
+    .stat-pill { min-width: 100px; }
+    .spec-row { flex-direction: column; gap: 2px; }
+    .spec-val { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<div class="book">
+
+  <!-- ══ COVER ══ -->
+  <div class="cover">
+    <div class="cover-ribbon">
+      <span>দ্য এফএসডি ক্রনিকলস · ভলিউম ২</span>
+      <span>ক্লায়েন্ট প্রজেক্ট আর্ক</span>
+    </div>
+    <div class="cover-body">
+      <div class="cover-eyebrow">ফিটমা ফাইল এবং ঘুমহীন রাতের একটি (প্রায়) সত্য গল্প</div>
+      <div class="cover-h1">পিক্সেল<br>&amp; প্রাইড</div>
+      <div class="cover-sub">একজন অসম্ভব ডিজাইন করে। অন্যজন তা যেভাবে হোক বিল্ড করে।</div>
+      <div class="vs-row">
+        <div class="hero-card hero-sf">
+          <div class="hero-name">সিফাত</div>
+          <div class="hero-title">⚡ ফ্রন্টএন্ড নেক্সট প্রো</div>
+        </div>
+        <div class="vs-badge">বনাম</div>
+        <div class="hero-card hero-sz">
+          <div class="hero-name">সিজান</div>
+          <div class="hero-title">🎨 দ্য গ্রেট ফিগমা</div>
+        </div>
+      </div>
+      <div class="cover-tagline">"চমৎকার ডিজাইন হলো একটি ফিগমা ফাইল। চমৎকার প্রোডাক্ট হলো রাত ৩ টায় সিফাত।" 🌙</div>
+    </div>
+    <div class="cover-footer">
+      <span class="tool-pill">Figma</span>
+      <span class="tool-pill">React</span>
+      <span class="tool-pill">Tailwind</span>
+      <span class="tool-pill">JetBrains Mono</span>
+      <span class="tool-pill">ডেডলাইন: শুক্রবার</span>
+    </div>
+  </div>
+
+
+  <!-- ══ CHAPTER 1 ══ -->
+  <div class="chapter ch-sz">
+    <div class="ch-icon">🎨</div>
+    <div class="chapter-num">অধ্যায় ১ · সোমবার সকাল, ৯:০৭ মি:</div>
+    <div class="chapter-title">সিজান ফাইল ধরালো।<br>সিফাতের চোয়াল ঝুলে গেল।</div>
+
+    <div class="story">
+      <p>ক্লায়েন্টের ব্রিফ ছিল মাত্র তিনটি শব্দের: <strong>"প্রিমিয়াম বানান।"</strong> 'দ্য গ্রেট ফিগমা' সিজান এই তিনটি শব্দ শুনে পুরো একটি সপ্তাহান্ত কাটিয়ে দিলেন হাজার ডিজাইন দেবতার সৃজনশীল শক্তি একটি ফিগমা ফাইলে ঢেলে দিতে।</p>
+      <p>সোমবার সকাল, ৯:০৭ মিনিট। তিনি প্রজেক্ট চ্যানেলে লিংকটি পাঠালেন ঠিক যেন একজন রাজা সিংহাসনে মুকুট রাখছেন— শান্ত, আত্মবিশ্বাসী এবং এটি সিফাতের পুরো সপ্তাহটির কী দশা করতে যাচ্ছে তা নিয়ে সম্পূর্ণ বেখবর।</p>
+    </div>
+
+    <div class="chat">
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">ভাই, ডিজাইন রেডি। আমার সেরা কাজ। রাত ৩টা পর্যন্ত জেগে ছিলাম। ক্লায়েন্ট আনন্দে কেঁদে ফেলবে। 🎨✨</div>
+      </div>
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">ওপেন করছি...</div>
+      </div>
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">...</div>
+      </div>
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">সিজান।</div>
+      </div>
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">হ্যাঁ? 😇</div>
+      </div>
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">এখানে ৯৪টা স্ক্রিন আছে।</div>
+      </div>
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">এটা একটা কমপ্রিহেনসিভ ডিজাইন সিস্টেম 🌟</div>
+      </div>
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">শুধুমাত্র হোমপেজের হিরো সেকশনেই ৭ লেয়ারের ওভারল্যাপিং ব্লারড গ্লাসমরফিজম কার্ড আছে।</div>
+      </div>
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">ডেপথ, ভাই। এটা ডেপথ সৃষ্টি করে। 🌊</div>
+      </div>
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">আমাদের হাতে শুক্রবার পর্যন্ত সময় আছে।</div>
+      </div>
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">আপনি তো নেক্সট প্রো। আমি আপনাকে মন থেকে বিশ্বাস করি। 🙏</div>
+      </div>
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">আমার ধারণা তুমি এখন দেখতে যাচ্ছো কষ্টের রূপ কেমন হয়।</div>
+      </div>
+    </div>
+
+    <div class="sfx" style="color: var(--sifat);">💀 সিফাত কষ্টের সাগরে প্রবেশ করেছেন।</div>
+
+    <div class="spec-card">
+      <div class="spec-title">📋 সিজানের ফিগমা ফাইল — অফিসিয়াল ড্যামেজ রিপোর্ট</div>
+      <div class="spec-row">
+        <span class="spec-key">মোট স্ক্রিন</span>
+        <span class="spec-val">৯৪টি আর্টবোর্ড (এখনও বাড়ছে)</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-key">ব্যবহৃত কাস্টম ফন্ট</span>
+        <span class="spec-val">"Velour Noir Display" — Google Fonts-এ নেই</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-key">হিরো অ্যানিমেশন টাইপ</span>
+        <span class="spec-val">স্ক্রল-ট্রিগার্ড প্যারালাক্স, 60fps স্মুথ</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-key">ন্যাভবার ব্লার লেয়ার</span>
+        <span class="spec-val">backdrop-filter: blur(40px) গ্রাডিয়েন্টের উপর</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-key">মোবাইল ব্রেকপয়েন্ট</span>
+        <span class="spec-val">০ — "কেন আমি নিজেকে সীমাবদ্ধ করব?"</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-key">বাটন হোভার স্টেট</span>
+        <span class="spec-val">১৪টি ভ্যারিয়েন্ট (এমনকি হোভার-অব-হোভারও আছে)</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-key">সিজানের ডিজাইনে ব্যয় করা সময়</span>
+        <span class="spec-val">উইকেন্ড জুড়ে ৪৮ ঘণ্টা</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-key">তৈরি করতে প্রয়োজনীয় সময়</span>
+        <span class="spec-val">সিফাত এখনও ক্যালকুলেট করছে... সাহায্য পাঠান।</span>
+      </div>
+    </div>
+
+    <div class="callout call-sz">
+      সিজানের ফিগমা কম্পোনেন্টগুলো ৬ লেয়ার গভীর পর্যন্ত নেস্টেড ছিল। শুধু বাটন কম্পোনেন্টেই ছিল ১৪ রকমের ভ্যারিয়েন্ট। এমনকি হোভার স্টেটের হোভার স্টেটের জন্য একটি "মাইক্রো-হোভার" স্টেটও ছিল। এটা ছিল বস্তুনিষ্ঠভাবে পাগল করার মতো। আবার এটাও সত্যি যে, এটা ছিল সিফাতের দেখা সবচেয়ে সুন্দর ডিজাইনগুলোর একটি, যদিও সে তা মুখে স্বীকার করবে না।
+    </div>
+  </div>
+
+
+  <!-- ══ CHAPTER 2 ══ -->
+  <div class="chapter ch-sf">
+    <div class="ch-icon">💻</div>
+    <div class="chapter-num">অধ্যায় ২ · মঙ্গলবার থেকে বুধবার</div>
+    <div class="chapter-title">সিফাত গ্লাসমরফিজমের সাথে<br>যুদ্ধে নেমেছে</div>
+
+    <div class="story">
+      <p>সিফাত এমন মানুষ নয় যে চ্যালেঞ্জ দেখে পিছু হটবে। সে হলো ফ্রন্টএন্ড নেক্সট প্রো। সে এর চেয়েও খারাপ পরিস্থিতি সামাল দিয়েছে। সম্ভবত। সে আঙুল ফুটিয়ে ভিএস কোড (VS Code) ওপেন করলো এবং ক্যারিয়ারের সবচেয়ে বিপজ্জনক যাত্রা শুরু করলো: সিজানের শৈল্পিক কল্পনাকে এমন সিএসএস (CSS)-এ রূপান্তর করা যা ব্রাউজারকে হ্যাং করবে না।</p>
+    </div>
+
+    <div class="scene">— ৪ ঘণ্টা পর — সাফারি ইনসিডেন্ট —</div>
+
+    <div class="chat">
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">সিজান। ন্যাভবারটা দেখো। তুমি গ্রাডিয়েন্ট ব্যাকগ্রাউন্ডের উপর backdrop-filter blur(40px) দিয়েছো যার অপাসিটি আবার ০.৬ এবং ৩-ভ্যালুর বক্স-শ্যাডো আছে।</div>
+      </div>
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">হ্যাঁ, ওটা "ফ্রস্টেড ক্রিস্টাল" ইফেক্ট। খুব প্রিমিয়াম। 🧊✨</div>
+      </div>
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">সাফারি ব্রাউজারে এটা রেন্ডার হচ্ছে না।</div>
+      </div>
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">ক্লায়েন্টকে বলো সাফারি ব্যবহার না করতে।</div>
+      </div>
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">ক্লায়েন্টের সিইও আইফোনে সাফারি ব্যবহার করেন। এটাই তার একমাত্র ডিভাইস।</div>
+      </div>
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">...শুধু ন্যাভবারটা রিডিজাইন করতে কত খরচ পড়বে? 🙂</div>
+      </div>
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">আমি ঠিক করছি। চিন্তা করো না। অন্য সব কিছু নিয়ে চিন্তা করো।</div>
+      </div>
+    </div>
+
+    <div class="code">
+<span class="c-comment">/* সিফাতের অভ্যন্তরীণ চিন্তা, সিএসএস হিসাবে প্রকাশিত */</span>
+<br>
+<span class="c-prop">.navbar</span> {
+<br><span class="c-indent"><span class="c-comment">/* সিজান যা চেয়েছিল: */</span></span>
+<br><span class="c-indent"><span class="c-prop">backdrop-filter</span>: <span class="c-val">blur(40px) saturate(180%)</span>;</span>
+<br><span class="c-indent"><span class="c-prop">background</span>: <span class="c-val">linear-gradient(...)opacity(0.6)</span>;</span>
+<br><span class="c-indent"><span class="c-prop">box-shadow</span>: <span class="c-val">0 8px 32px rgba(0,0,0,0.37)</span>;</span>
+<br>
+<br><span class="c-indent"><span class="c-err">/* সাফারি যা শুনলো: হাহাহা, অসম্ভব! */</span></span>
+<br>}
+<br>
+<br><span class="c-prop">.navbar-the-fix</span> {
+<br><span class="c-indent"><span class="c-ok">/* সিফাতের সমাধান: ৩টি ফলব্যাক, ২টি মিডিয়া কুয়েরি, ১টি প্রার্থনা */</span></span>
+<br><span class="c-indent"><span class="c-prop">-webkit-backdrop-filter</span>: <span class="c-val">blur(40px)</span>;</span>
+<br><span class="c-indent"><span class="c-prop">backdrop-filter</span>: <span class="c-val">blur(40px)</span>;</span>
+<br><span class="c-indent"><span class="c-str">/* 🙏 কাজ করছে। কোনোভাবে। এটা স্পর্শ করবেন না। */</span></span>
+<br>}</div>
+
+    <div class="scene">— বুধবার দুপুর ২টা — স্পেসিং ইনসিডেন্ট —</div>
+
+    <div class="chat">
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">সিজান। কার্ড প্যাডিং দেখো। ফিগমাতে এটা ২৩ পিক্সেল। ২৪ও না, ২০ও না। তেইশ। আলাদা। পিক্সেল।</div>
+      </div>
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">২৩ অনেক বেশি ব্যালেন্সড মনে হয়েছে। ২৪ খুব বেশি ইভেন (even)। ইভেননেস বোরিং। ডিজাইন মানেই টেনশন সৃষ্টি করা। 🎭</div>
+      </div>
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">টেইলউইন্ডের ডিফল্ট কনফিগে p-[23px] নেই।</div>
+      </div>
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">তাহলে কনফিগ এক্সটেন্ড করো 🙂</div>
+      </div>
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">আমি যোগ করছি। এর পাশে একটা কমেন্টও লিখে রাখবো। আর আমি এই মুহূর্তটা সারাজীবন মনে রাখবো।</div>
+      </div>
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">যখন ক্লায়েন্ট বলবে এটা ব্যালেন্সড লাগছে, তখন আপনিই আমাকে ধন্যবাদ দেবেন 😌</div>
+      </div>
+    </div>
+
+    <div class="callout call-sf">
+      সিফাত টেইলউইন্ড কনফিগে p-[23px] যোগ করলো। তার পাশে কমেন্ট লেখা ছিল: <em>"প্রশ্ন করবেন না। পরিবর্তন করবেন না। সরাসরি এর দিকে তাকাবেন না।"</em> এরপর সে পিক্সেল-পারফেক্ট ২৩ পিক্সেল প্যাডিং দিয়ে পুরো কার্ড কম্পোনেন্ট তৈরি করলো, সাথে সিজানের ডিজাইন না করা রেসপন্সিভ ব্রেকপয়েন্ট এবং একটি লোডিং স্কেলিটন যা সিজান আঁকেনি কিন্তু দেখতে ঠিক সিজানের ডিজাইনের মতোই লাগছিল। সিফাত বিপজ্জনকভাবে 'সিজান ভাষা' বলতে শিখছিল।
+    </div>
+
+    <div class="progress-section">
+      <div class="progress-label-main">সিফাতের বিল্ড প্রগ্রেস — বুধবার সন্ধ্যা</div>
+      <div class="prog-item">
+        <div class="prog-meta"><span>ন্যাভবার (সাফারি ফিক্সড)</span><span style="color:var(--green);">সম্পন্ন ✓</span></div>
+        <div class="prog-track"><div class="prog-fill" style="width:100%; background:var(--sifat);"></div></div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-meta"><span>হিরো সেকশন</span><span>৭৮% — প্যারালাক্স নিয়ে যুদ্ধ চলছে</span></div>
+        <div class="prog-track"><div class="prog-fill" style="width:78%; background:var(--sifat-mid);"></div></div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-meta"><span>প্রোডাক্ট কার্ডস</span><span>৬০% — ২৩ পিক্সেল প্যাডিং কনফার্মড</span></div>
+        <div class="prog-track"><div class="prog-fill" style="width:60%; background:#378ADD;"></div></div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-meta"><span>মোবাইল রেসপন্সিভ</span><span style="color:#f85149;">১২% — সিজান ডিজাইন করেনি</span></div>
+        <div class="prog-track"><div class="prog-fill" style="width:12%; background:#f85149;"></div></div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-meta"><span>অবশিষ্ট ৮৭ স্ক্রিন</span><span style="color:#888;">০% — শুক্রবার কেবল একটি কল্পনা</span></div>
+        <div class="prog-track"><div class="prog-fill" style="width:2%; background:#B4B2A9;"></div></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══ CHAPTER 3 ══ -->
+  <div class="chapter ch-war">
+    <div class="ch-icon">⚔️</div>
+    <div class="chapter-num">অধ্যায় ৩ · বৃহস্পতিবার রাত — আলোচনার মহা-আসর</div>
+    <div class="chapter-title">যখন ডিজাইনারের সাথে<br>ব্রাউজারের দেখা হয়</div>
+
+    <div class="story">
+      <p>বৃহস্পতিবার, রাত ৯টা। ১৬ ঘণ্টা বাদেই ডেমো। সিজান সংহতি প্রকাশের বিরল প্রয়াসে ল্যাপটপ খুললেন এবং বিল্ড কলে জয়েন করলেন। তিনি বললেন যে তিনি "দৃষ্টিভঙ্গি বাস্তবে রূপ নিতে দেখতে চান।" যা তিনি বলেননি তা হলো, তিনি আগে কখনোই ব্রাউজারের ভেতর নিজের ডিজাইন দেখেননি।</p>
+      <p>তিনি এখন বাস্তব শিক্ষা পেতে যাচ্ছিলেন।</p>
+    </div>
+
+    <div class="chat">
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">দাঁড়ান। ফন্ট রেন্ডারিং! ফিগমার চেয়ে বেশি মোটা লাগছে কেন?</div>
+      </div>
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">হ্যাঁ। ব্রাউজার ফন্টকে ফিগমার চেয়ে আলাদাভাবে রেন্ডার করে। এটা পৃথিবী কীভাবে কাজ করে তার একটি জানা সত্য।</div>
+      </div>
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">এটা কি চিকন করা যাবে?</div>
+      </div>
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">এটা অলরেডি font-weight 300 তে আছে। এর নিচে আমি যেতে পারব না। যদি না আপনি অদৃশ্য টেক্সট চান।</div>
+      </div>
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">font-weight 200 দিলে হয় না?</div>
+      </div>
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">এই ফন্টের কোনো ২০০ ওয়েট নেই। ব্রাউজার ফেইক করবে এবং ৩০০-ই দেখাবে। ব্রাউজার আপনার মুখের উপর সরাসরি মিথ্যা বলবে।</div>
+      </div>
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">ব্রাউজার আমার ডিজাইনের সাথে মিথ্যা বলছে?? 😤</div>
+      </div>
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">সিজান, আমার জীবনের প্রতিটি দিন এভাবেই কাটে। স্বাগতম।</div>
+      </div>
+    </div>
+
+    <div class="sfx" style="color:#5F5E5A;">🌩️ ডিজাইনার আবিষ্কার করলেন ব্রাউজার ফিগমা নয়।</div>
+
+    <div class="scene">— রাত ১১টা — অ্যানিমেশন সংকট —</div>
+
+    <div class="chat">
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">হিরো অ্যানিমেশনটা আটকে আটকে যাচ্ছে। ফিগমাতে তো একদম মাখনের মতো ৬০fps ছিল। এমনকি আমার বিড়ালও এটা পছন্দ করেছিল।</div>
+      </div>
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">কারণ আপনি একসাথে ১৪টি এলিমেন্ট অ্যানিমেট করেছেন — অপাসিটি, ট্রান্সফর্ম, ফিল্টার এবং উইডথ (width)। উইডথ অ্যানিমেশন জিপিইউ কম্পোজিটিং ধ্বংস করে দেয়।</div>
+      </div>
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">তাহলে এখন কী করব?</div>
+      </div>
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">আমি শুধু ট্রান্সফর্ম এবং অপাসিটি ব্যবহার করে এটা নতুন করে করছি। দেখতে ৯৫% একই রকম লাগবে। বাকি ৫% হলো আপনার ঐ উইডথ বাউন্স।</div>
+      </div>
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">সিফাত, ঐ ৫% ছিল আমার আত্মা (soul)। সেই বাউন্সে আমি নিজের আত্মা ঢেলে দিয়েছিলাম।</div>
+      </div>
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">আপনার আত্মা ১৮এফপিএস-এ চলছে। আমি একে নিজের হাত থেকে বাঁচাচ্ছি।</div>
+      </div>
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">...ঠিক আছে, আত্মা বাঁচান 😔 নতুন করে করেন।</div>
+      </div>
+    </div>
+
+    <div class="scene">— রাত ১:৩০ — মাঝরাতের মিরাকল —</div>
+
+    <div class="chat">
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">সিফাত। মোবাইল ভিউ! আপনি... মোবাইল ভিউ তৈরি করেছেন!</div>
+      </div>
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">আপনি ডিজাইন করেননি, তাই আমি করেছি।</div>
+      </div>
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">এটা দেখতে একদম আমার ডিজাইনের মতোই হয়েছে। এটা কীভাবে সম্ভব?</div>
+      </div>
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">আমি টানা ৩ দিন আপনার কাজ স্টাডি করেছি। আমি এখন সিজান ভাষায় অনর্গল কথা বলতে পারি। এটা এমন এক রোগ যা থেকে আমি হয়তো কখনোই সেরে উঠব না।</div>
+      </div>
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">এটা কি বড় প্রশংসা নাকি চিকিৎসার দরকার 😭</div>
+      </div>
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">অবশ্যই দুটোই। ঘুমাতে যান। আমি শেষ ৩টি সেকশন শেষ করছি।</div>
+      </div>
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">ভাই, আপনি একজন লিজেন্ড। সত্যিকারের লিজেন্ড। 🫡</div>
+      </div>
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">জানি। এখন যান, নয়তো আমার মন বদলে যাবে।</div>
+      </div>
+    </div>
+
+    <div class="callout call-war">
+      রাত ৩:১২ মিনিটে সিফাত শেষ কমিট (commit) পুশ করলো। মেসেজ ছিল: <em>"feat: সম্পন্ন। সব ৯৪টি স্ক্রিন। সিজানের কাছে এখন ১টি বড় বিরিয়ানি পাওনা, ২টি হলে আরও ভালো।"</em> সে ল্যাপটপ বন্ধ করলো। সিলিংয়ের দিকে তাকিয়ে থাকলো। সে এমন একজনের মতো ৪ ঘণ্টা ঘুমালো যে নিশ্চিতভাবে মৃত্যুমুখ থেকে বেঁচে ফিরেছে।
+    </div>
+  </div>
+
+
+  <!-- ══ CHAPTER 4 ══ -->
+  <div class="chapter ch-end">
+    <div class="ch-icon">🏆</div>
+    <div class="chapter-num">অধ্যায় ৪ · শুক্রবার দুপুর ২টা — ফলাফল</div>
+    <div class="chapter-title">ক্লায়েন্ট সাইটটি দেখলো।<br>সবাই ভাব নিলো কাজটা খুব সহজ ছিল।</div>
+
+    <div class="story">
+      <p>ডেমো কল। সিজান ওয়েটিং রুমে বসে আছেন সেই প্রশান্ত আত্মবিশ্বাস নিয়ে যে উইকেন্ডে ৯৪টি স্ক্রিন ডিজাইন করেছে। সিফাত ওয়েটিং রুমে বসে আছে সেই শূন্য চোখ নিয়ে যে মাত্র ৪ ঘণ্টা ঘুমিয়েছে, অজানাপাশে কফি খেয়ে শেষ করেছে এবং সিএসএস (CSS)-এ স্বপ্ন দেখা শুরু করেছে।</p>
+      <p>পিএম স্ক্রিন শেয়ার করলেন। সাইটটি লোড হলো।</p>
+      <p>অবাক করার মতো সুন্দর! একদম মাখনের মতো মসৃণ। সাফারিতেও কাজ করছে। সব ফোনেও। যেমনটা ধারণা করা হয়েছিল, ২৩ পিক্সেল প্যাডিং সাইটে এক ধরনের চমৎকার ভারসাম্য তৈরি করেছে।</p>
+    </div>
+
+    <div class="chat">
+      <div class="msg">
+        <div class="av av-cl">CL</div>
+        <div class="bub bub-cl">ওয়াও! আমরা ঠিক যেমনটা কল্পনা করেছিলাম একদম তেমন। হিরো অ্যানিমেশনটা অনেক স্মুথ!</div>
+      </div>
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">ধন্যবাদ। মোশন ডিজাইনের পেছনে আমি অনেক সময় দিয়েছি। 😌</div>
+      </div>
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">[টাইপ করছে...] [মেসেজ মুছে দিল] [আবার টাইপ করলো] [আবার মুছলো]</div>
+      </div>
+      <div class="msg">
+        <div class="av av-cl">CL</div>
+        <div class="bub bub-cl">আর আমার আইফোনেও কাজ করছে চমৎকারভাবে! আপনারা মোবাইল ভার্সনও ডিজাইন করেছেন?</div>
+      </div>
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">অবশ্যই! মোবাইল-ফার্স্ট থিংকিং। সিফাত খুব সুন্দরভাবে ইম্প্লিমেন্ট করেছে। 😇</div>
+      </div>
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">সিজান। তুমি একটা মোবাইল স্ক্রিনও ডিজাইন করোনি। একটাও না। শূন্য।</div>
+      </div>
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">উফ! আমি ভিশন (VISION) ডিজাইন করেছিলাম। আপনি তা শ্রেষ্ঠত্বের সাথে এক্সিকিউট করেছেন। একেই বলে পার্টনারশিপ। 🤝</div>
+      </div>
+      <div class="msg">
+        <div class="av av-sf">SF</div>
+        <div class="bub bub-sf">পার্টনারশিপে একজন ঘুমায় আর একজন ঘুমায় না, তাকে অন্য কিছু বলে, সিজান।</div>
+      </div>
+      <div class="msg right">
+        <div class="av av-sz">SZ</div>
+        <div class="bub bub-sz">আমি প্রশ্নোত্তর পর্বের জন্য আমার ক্রিয়েটিভ এনার্জি সঞ্চয় করছিলাম 🧠</div>
+      </div>
+    </div>
+
+    <div class="sfx" style="color: var(--green);">🎉 ক্লায়েন্ট অ্যাপ্রুভ করেছে। প্রজেক্ট শিপড। বিরিয়ানি পাওনা থাকলো।</div>
+
+    <div class="callout call-gold">
+      ক্লায়েন্ট ঠিক একটি সংশোধনী চাইলেন: "বাটনটা কি আরেকটু রাউন্ড করা যায়?" সিজান কোনো দ্বিধা ছাড়াই এবং পূর্ণ আত্মবিশ্বাস নিয়ে বললেন, "অবশ্যই— আমার অরিজিনাল ডিজাইনে ওটাই ছিল, আমরা রিস্টোর করতে পারি।" সিফাত সরাসরি ক্যামেরার দিকে তাকালো। সে কোড এডিটর ওপেন করলো। সে <code style="background:rgba(0,0,0,0.08);padding:1px 5px;border-radius:4px;font-family:'JetBrains Mono',monospace;">border-radius: 8px</code> থেকে <code style="background:rgba(0,0,0,0.08);padding:1px 5px;border-radius:4px;font-family:'JetBrains Mono',monospace;">border-radius: 12px</code> করে দিলো। মাত্র ৪ সেকেন্ড লাগলো। সে এ তথ্য ক্লায়েন্ট বা সিজানকে জানালো না। সে কেবল নীরবে পিআর (PR) মার্জ করে দিলো।
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-pill sp-sz">
+        <div class="stat-num">৯৪</div>
+        <div class="stat-lbl">স্ক্রিন ডিজাইন</div>
+      </div>
+      <div class="stat-pill sp-sf">
+        <div class="stat-num">৩:০০</div>
+        <div class="stat-lbl">শেষ কমিট (রাত)</div>
+      </div>
+      <div class="stat-pill sp-gold">
+        <div class="stat-num">২৩px</div>
+        <div class="stat-lbl">পবিত্র প্যাডিং</div>
+      </div>
+      <div class="stat-pill sp-green">
+        <div class="stat-num">১</div>
+        <div class="stat-lbl">বিরিয়ানি পাওনা</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══ EPILOGUE ══ -->
+  <div class="epilogue">
+    <div class="epi-title">🤝 উপসংহার</div>
+    <div class="epi-body">
+      সিজান এমন কিছু ডিজাইন করেন যা বিল্ড করা প্রায় অসম্ভব। এমন জিনিস যাতে থাকে ৭ লেয়ারের ব্লার, ১৪টি বাটন ভ্যারিয়েন্ট এবং প্যাডিং যা টেইলউইন্ড ডিজাইন সিস্টেমের বাইরে। তিনি এটি করেন পূর্ণ প্রত্যয় নিয়ে, রাত ৩টায়, সৃজনশীল প্যাশন আর অটুট বিশ্বাস নিয়ে যে এই ভিশনের জন্য কষ্ট করা সার্থক।
+    </div>
+    <div class="epi-divider"></div>
+    <div class="epi-body">
+      সিফাত সেগুলো যেকোনো ভাবেই হোক বিল্ড করে ফেলেন। সাফারির জন্য -webkit প্রিফিক্স, কাস্টম টেইলউইন্ড কনফিগ, জিপিইউ-বান্ধব অ্যানিমেশন রিরাইট এবং মাত্র ৪ ঘণ্টার মধ্যে স্ক্র্যাচ থেকে তৈরি করা মোবাইল লেআউট। সে সারাক্ষণ কপালে ভাঁজ ফেলে বিড়বিড় করে। তবুও পারফেক্টের চেয়ে কম কিছু কখনোই শিপ করে না।
+    </div>
+    <div class="epi-divider"></div>
+    <div class="epi-body">
+      একসাথে তারা এফএসডি ক্রনিকলসের সবচেয়ে অদ্ভুত অথচ সবচেয়ে কার্যকর ডিজাইন-ডেভেলপমেন্ট জুটি। ক্লায়েন্ট কখনোই জানবে না তারা বিশৃঙ্খলার কত কাছাকাছি ছিল। আর এটাই তো হওয়া উচিত।
+    </div>
+    <div class="epi-quote">
+      "চমৎকার ডিজাইন হলো একটি ফিগমা ফাইল।<br>
+      চমৎকার প্রোডাক্ট হলো রাত ৩ টায় সিফাত।" 🌙
+    </div>
+  </div>
+
+  <div class="footer">দ্য এফএসডি ক্রনিকলস · ভলিউম ২ · পিক্সেল এবং আভিজাত্য</div>
+
+</div>
+
+</body>
+</html>
